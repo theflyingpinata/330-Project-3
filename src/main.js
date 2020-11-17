@@ -1,20 +1,23 @@
 let summonerName;
+let allTimeeammates = {};
+let keys = [];
+let win = 0, lose = 0;
 
 function init() {
     document.querySelector("#searchBtn").onclick = (e) => {
         let content = document.querySelector("#content");
         summonerName = document.querySelector("#summonerName").value;
 
+        let endIndex = 3;
+        let beginTime = 1605225600;
         // 2. Create an XHR object to download the web service
         // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/
         const xhr = new XMLHttpRequest();
         const apiKey = "RGAPI-0aba2c2c-ebb5-4ea1-a265-6ab0824fa7e4";
         //https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Doublelift?api_key=RGAPI-YOUR-API-KEY
-        const url = `https://people.rit.edu/kct2548/330/project-3/history_proxy.php?summoner=${summonerName}&apiKey=${apiKey}`;
+        const url = `https://people.rit.edu/kct2548/330/project-3/history_proxy.php?summoner=${summonerName}&apiKey=${apiKey}&endIndex=${endIndex}`;
 
 
-        let endIndex = 5;
-        let beginTime = 1605225600;
         // my account id
         // ihBG1EIlGbon_KNR8HJ0J6lQM03qPILNpcJWK3_wlV5pSVc
 
@@ -63,13 +66,14 @@ function init() {
         xhr.send();
 
     }; // end onclick
+
 }
 
 function parseData(json) {
-    let allTimeeammates = {};
-    let keys = [];
-    let win = 0, lose = 0;
-
+    win = 0;
+    lose = 0;
+    keys = [];
+    allTimeeammates = {};
     let content = document.querySelector("#content");
     content.innerHTML = '';
     // loop through matches
@@ -95,7 +99,7 @@ function parseData(json) {
         }
 
         // Team stats
-        if (match["teams"]["win"] == "Win") {
+        if (match["teams"][teamIndex]["win"] == "Win") {
             win++;
         }
         else {
@@ -150,9 +154,56 @@ function parseData(json) {
         content.appendChild(p);
     }
 
+
+    // Wins and loses
     let p = document.createElement("p");
     p.innerHTML = `<b>Wins: ${win}</b><br><b>Loses: ${lose}</b>`;
     content.appendChild(p);
+    
+    initChart();
+}
+
+function initChart(){
+
+    // chart
+    let ctx = document.getElementById('myChart').getContext('2d');
+    let myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [keys[0],keys[1],keys[2],keys[3],keys[4]],
+            datasets: [{
+                label: '# of Games',
+                data: [allTimeeammates[keys[0]], allTimeeammates[keys[1]], allTimeeammates[keys[2]], allTimeeammates[keys[3]], allTimeeammates[keys[4]]],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
 }
 
 export { init };
