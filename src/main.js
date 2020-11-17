@@ -1,19 +1,31 @@
-let summonerName;
+import * as charting from "./charting.js";
+
+let summonerName = "theflyingpinata";
 let allTimeeammates = {};
 let keys = [];
 let win = 0, lose = 0;
 
+function setupVariables() {
+    summonerName = "theflyingpinata";
+    allTimeeammates = {};
+    keys = [];
+    win = 0, lose = 0;
+}
 function init() {
+    setupVariables();
+
     document.querySelector("#searchBtn").onclick = (e) => {
-        let content = document.querySelector("#content");
+        //let content = document.querySelector("#content");
+        setupVariables();
         summonerName = document.querySelector("#summonerName").value;
 
         let endIndex = 3;
+        endIndex = document.querySelector("#games").value;
         let beginTime = 1605225600;
         // 2. Create an XHR object to download the web service
         // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/
         const xhr = new XMLHttpRequest();
-        const apiKey = "RGAPI-0aba2c2c-ebb5-4ea1-a265-6ab0824fa7e4";
+        const apiKey = "RGAPI-6a6fb803-811e-4598-9d46-fcb96f9f769e";
         //https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Doublelift?api_key=RGAPI-YOUR-API-KEY
         const url = `https://people.rit.edu/kct2548/330/project-3/history_proxy.php?summoner=${summonerName}&apiKey=${apiKey}&endIndex=${endIndex}`;
 
@@ -113,10 +125,12 @@ function parseData(json) {
                 let tempSumName = match["participantIdentities"][i]["player"]["summonerName"];
                 if (tempSumName != summonerName) {
                     if (allTimeeammates[tempSumName] == undefined) {
-                        allTimeeammates[tempSumName] = 1;
+                        allTimeeammates[tempSumName] = [];
+                        allTimeeammates[tempSumName]["count"] = 1;
+                        allTimeeammates[tempSumName]["profileIcon"] = match["participantIdentities"][i]["player"]["profileIcon"];
                     }
                     else {
-                        allTimeeammates[tempSumName]++;
+                        allTimeeammates[tempSumName]["count"]++;
                     }
                 }
             }
@@ -143,14 +157,14 @@ function parseData(json) {
     // sort teammates
     keys = Object.keys(allTimeeammates);
     keys.sort((a, b) => {
-        let countA = allTimeeammates[a];
-        let countB = allTimeeammates[b];
+        let countA = allTimeeammates[a]["count"];
+        let countB = allTimeeammates[b]["count"];
         return countB - countA;
     });
 
     for (let i = 0; i < 5; i++) {
         let p = document.createElement("p");
-        p.innerHTML = `<b>${keys[i]}: ${allTimeeammates[keys[i]]}</b><br>`;
+        p.innerHTML = `<b>${keys[i]}: ${allTimeeammates[keys[i]]["count"]}</b><br>`;
         content.appendChild(p);
     }
 
@@ -159,51 +173,38 @@ function parseData(json) {
     let p = document.createElement("p");
     p.innerHTML = `<b>Wins: ${win}</b><br><b>Loses: ${lose}</b>`;
     content.appendChild(p);
-    
+
     initChart();
 }
 
-function initChart(){
+function initChart() {
 
+    //let ctx = document.querySelector("canvas").getContext('2d');
     // chart
-    let ctx = document.getElementById('myChart').getContext('2d');
-    let myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [keys[0],keys[1],keys[2],keys[3],keys[4]],
-            datasets: [{
-                label: '# of Games',
-                data: [allTimeeammates[keys[0]], allTimeeammates[keys[1]], allTimeeammates[keys[2]], allTimeeammates[keys[3]], allTimeeammates[keys[4]]],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: false,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
+    let data = [];
+    for (let i = 0; i < 5; i++) {
+        data.push(allTimeeammates[keys[i]]["count"]);
+    }
+
+    // profile icon example
+    // http://ddragon.leagueoflegends.com/cdn/10.23.1/img/profileicon/588.png
+
+    let images = [];
+    let imagesLoaded = 0;
+    for (let i = 0; i < 5; i++) {
+        let image = new Image(100, 100);
+        image.src = `http://ddragon.leagueoflegends.com/cdn/10.23.1/img/profileicon/${allTimeeammates[keys[i]]["profileIcon"]}.png`;
+        console.log(image.src);
+        image.onload = function () {
+            images[i] = image;
+            imagesLoaded++;
+            if (imagesLoaded == 5) {
+                console.log(images);
+                charting.basicBarGraph(400, 1000, keys.slice(0, 5), "# of Games", data, images);
             }
-        }
-    });
+        };
+    }
+
 }
 
 export { init };
