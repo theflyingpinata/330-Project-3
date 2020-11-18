@@ -1,4 +1,4 @@
-function basicBarGraph(height, width, _labels, _dataLabel, _data, _images = []) {
+function basicBarGraph(height, width, _title, _labels, _dataLabel, _data, _images = []) {
     let content = document.querySelector("#content");
     let canvas = document.createElement("canvas");
     canvas.height = height;
@@ -14,21 +14,21 @@ function basicBarGraph(height, width, _labels, _dataLabel, _data, _images = []) 
         'rgba(153, 102, 255, 0.2)',
         'rgba(255, 159, 64, 0.2)'
     ];
-    
-    if(_images != undefined){
+
+    if (_images != undefined) {
         // let fillPattern = ctx.createPattern(_images[0], 'repeat');
         // backgroundColors = fillPattern;
-        
+
         let domMatrix = new DOMMatrix()
         backgroundColors = [];
-        for(let image of _images) {
+        for (let image of _images) {
             let fillPattern = ctx.createPattern(image, 'repeat');
             fillPattern.setTransform(domMatrix.scale(.25));
             backgroundColors.push(fillPattern);
         }
-        
+
     }
-    
+
 
 
     let myChart = new Chart(ctx, {
@@ -58,6 +58,13 @@ function basicBarGraph(height, width, _labels, _dataLabel, _data, _images = []) 
                         beginAtZero: true
                     }
                 }]
+            },
+            legend: {
+                display: false
+            },
+            title: {
+                display: true,
+                text: _title
             }
         }
     });

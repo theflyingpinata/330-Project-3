@@ -200,7 +200,7 @@ function initChart() {
             imagesLoaded++;
             if (imagesLoaded == 5) {
                 console.log(images);
-                charting.basicBarGraph(400, 1000, keys.slice(0, 5), "# of Games", data, images);
+                charting.basicBarGraph(400, 1000,"# of Games with Summoner on Your Team", keys.slice(0, 5), "# of Games", data, images);
             }
         };
     }
