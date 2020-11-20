@@ -29,27 +29,27 @@ function basicBarGraph(height, width, _title, _labels, _dataLabel, _data, _image
 
     }
 
-
+    let barChartData = {
+        labels: _labels,
+        datasets: [{
+            label: _dataLabel,
+            data: [1],
+            backgroundColor: backgroundColors,
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
 
     let myChart = new Chart(ctx, {
         type: 'bar',
-        data: {
-            labels: _labels,
-            datasets: [{
-                label: _dataLabel,
-                data: _data,
-                backgroundColor: backgroundColors,
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
+        data: barChartData,
         options: {
             responsive: false,
             scales: {
@@ -69,6 +69,9 @@ function basicBarGraph(height, width, _title, _labels, _dataLabel, _data, _image
         }
     });
 
+    barChartData.datasets[0].data = _data;
+    console.log(barChartData);
+    myChart.update();
 }
 
 export { basicBarGraph };
