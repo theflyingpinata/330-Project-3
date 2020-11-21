@@ -5,26 +5,41 @@
     <meta charset='utf-8' />
     <title>Facts of Legends</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link href='styles/default-styles.css' rel="stylesheet" />
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
     <script src="./src/loader.js" type="module"></script>
 </head>
 
 <body>
-    <h1> Facts of Legends</h1>
+    <div id="inputs">
+        <h1> Facts of Legends</h1>
+
+        <div if="summonerNameInput" class="inputSection">
+            <div> Summoner To Search </div>
+            <input type="text" id="summonerName" value="theflyingpinata">
+        </div>
+
+        <div id="pastGamesInput" class="inputSection">
+            <div> Look at past
+                <select id="games">
+                    <option value=2 selected>2</option>
+                    <option value=3>3</option>
+                    <option value=5>5</option>
+                    <option value=10>10</option>
+                    <option value=18>18</option>
+                </select>
+                games </div>
+        </div>
+
+        <button id="searchBtn">Search For Summoner Name</button>
+    </div>
+
     <hr>
-    <input type="text" id="summonerName" value="theflyingpinata">
-    <select id="games">
-        <option value=2 selected>2</option>
-        <option value=3>3</option>
-        <option value=5>5</option>
-        <option value=10>10</option>
-        <option value=18>18</option>
-    </select>
-    <button id="searchBtn">Search Summoner Name</button>
-    <hr>
+
     <div id="content">
         Stinky
     </div>

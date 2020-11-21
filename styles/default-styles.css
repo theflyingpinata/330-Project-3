@@ -1,8 +1,41 @@
+html {
+    background-color: #f1efef;
+    color: #353434;
+}
+
 body {
-    margin: 0;
-    padding: 0;
+    top: 2em;
+    font-size: 20px;
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 #myChart {
     width: 400px;
+}
+
+.centerText {
+    margin: auto;
+    padding: 1em;
+    width: 50%;
+    position: relative;
+    text-align: center;
+}
+
+#inputs {
+    position: fixed;
+    width: 15%;
+    height: 90%;
+    padding-left: 1em;
+    margin-right: -1em;
+    border-right: 2px solid #2c2c2c;
+}
+
+#content {
+    margin-left: 20%;
+    right: 20%;
+}
+
+.inputSection {
+    margin-top: 8px;
+    margin-bottom: 8px;
 }

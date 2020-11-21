@@ -25,7 +25,7 @@ function init() {
         // 2. Create an XHR object to download the web service
         // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/
         const xhr = new XMLHttpRequest();
-        const apiKey = "RGAPI-349e0c18-6e08-4e17-85f1-6c1faeb19f4d";
+        const apiKey = "RGAPI-d7f35568-a0a6-4329-8bbd-f3d0c7ccf5ca";
         //https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Doublelift?api_key=RGAPI-YOUR-API-KEY
         const url = `https://people.rit.edu/kct2548/330/project-3/history_proxy.php?summoner=${summonerName}&apiKey=${apiKey}&endIndex=${endIndex}`;
 
@@ -162,16 +162,23 @@ function parseData(json) {
         return countB - countA;
     });
 
+    let teammatesP = document.createElement("p");
+    teammatesP.innerHTML = `<b> <u> Top 5 Teammates In Past ${document.querySelector("#games").value} Games</u> </b> <br>`;
+    content.appendChild(teammatesP);
+    
+    let teammatesList = document.createElement("ol");
     for (let i = 0; i < 5; i++) {
         let p = document.createElement("p");
-        p.innerHTML = `<b>${keys[i]}: ${allTimeeammates[keys[i]]["count"]}</b><br>`;
+        p.innerHTML = `<li><b>${keys[i]}: ${allTimeeammates[keys[i]]["count"]}</b></li>`;
         content.appendChild(p);
     }
+    teammatesList.append("ol");
 
 
     // Wins and loses
     let p = document.createElement("p");
-    p.innerHTML = `<b>Wins: ${win}</b><br><b>Loses: ${lose}</b>`;
+    p.innerHTML = `<b> <u> Win/Loss Ratio </u> </b> <br>`;
+    p.innerHTML += `<b> Wins: ${win}</b><br><b>Loses: ${lose} </b>`;
     content.appendChild(p);
 
     initChart();
