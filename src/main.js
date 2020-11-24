@@ -27,7 +27,7 @@ function init() {
         const xhr = new XMLHttpRequest();
         const apiKey = "RGAPI-0101d276-5c25-4b6c-8f70-9382a0e1498d";
         //https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Doublelift?api_key=RGAPI-YOUR-API-KEY
-        const url = `https://people.rit.edu/kct2548/330/project-3/history_proxy.php?summoner=${summonerName}&apiKey=${apiKey}&endIndex=${endIndex}`;
+        const url = `https://people.rit.edu/kct2548/330/project-3/php/history_proxy.php?summoner=${summonerName}&apiKey=${apiKey}&endIndex=${endIndex}`;
 
 
         // my account id
