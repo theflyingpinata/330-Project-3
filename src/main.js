@@ -25,7 +25,7 @@ function init() {
         // 2. Create an XHR object to download the web service
         // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/
         const xhr = new XMLHttpRequest();
-        const apiKey = "RGAPI-d7f35568-a0a6-4329-8bbd-f3d0c7ccf5ca";
+        const apiKey = "RGAPI-0101d276-5c25-4b6c-8f70-9382a0e1498d";
         //https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Doublelift?api_key=RGAPI-YOUR-API-KEY
         const url = `https://people.rit.edu/kct2548/330/project-3/history_proxy.php?summoner=${summonerName}&apiKey=${apiKey}&endIndex=${endIndex}`;
 
@@ -146,11 +146,12 @@ function parseData(json) {
 
         // sort team mates //////////////////
 
-
+/*
         // testing content
         let p = document.createElement("p");
         p.innerHTML = `<b>Participant ID: ${summonerPID}</b><hr>`;
         content.appendChild(p);
+        */
 
     } // end of matches loop
 
