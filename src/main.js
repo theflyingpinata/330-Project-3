@@ -25,7 +25,7 @@ function init() {
         // 2. Create an XHR object to download the web service
         // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/
         const xhr = new XMLHttpRequest();
-        const apiKey = "RGAPI-0101d276-5c25-4b6c-8f70-9382a0e1498d";
+        const apiKey = "RGAPI-971dd69c-024f-43c8-81a8-5dfb6a915e71";
         //https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Doublelift?api_key=RGAPI-YOUR-API-KEY
         const url = `https://people.rit.edu/kct2548/330/project-3/php/history_proxy.php?summoner=${summonerName}&apiKey=${apiKey}&endIndex=${endIndex}`;
 
