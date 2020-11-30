@@ -35,32 +35,41 @@
 </head>
 
 <body>
-    <div id="inputs">
-        <h1> Facts of Legends</h1>
+    <div id="app">
+        <div id="inputs">
+            <h1> Facts of Legends</h1>
 
-        <div if="summonerNameInput" class="inputSection">
-            <div> Summoner To Search </div>
-            <input type="text" id="summonerName" value="theflyingpinata">
+            <div if="summonerNameInput" class="inputSection">
+                <div> Summoner To Search </div>
+                <input type="text" id="summonerName" value="theflyingpinata">
+            </div>
+
+            <div id="pastGamesInput" class="inputSection">
+                <div> Look at past
+                    <select id="games">
+                        <option value=2 selected>2</option>
+                        <option value=3>3</option>
+                        <option value=5>5</option>
+                        <option value=10>10</option>
+                        <option value=18>18</option>
+                    </select>
+                    games </div>
+            </div>
+
+            <div>
+
+            </div>
+
+            <button v-on:click="updateLocalStorage" id="searchBtn">Search For Summoner Name</button>
+
+            <h4>{{ lastSearchedTitle }}</h4>
+
+            <ol>
+                <li  v-for="l in lastSearched.slice().reverse()"> {{ l }} </li>
+            </ol>
+
+            <button v-on:click="deleteLocalStorage"> Delete Local Storage </button>
         </div>
-
-        <div id="pastGamesInput" class="inputSection">
-            <div> Look at past
-                <select id="games">
-                    <option value=2 selected>2</option>
-                    <option value=3>3</option>
-                    <option value=5>5</option>
-                    <option value=10>10</option>
-                    <option value=18>18</option>
-                </select>
-                games </div>
-        </div>
-
-        <div id="">
-
-        </div>
-
-        <button id="searchBtn">Search For Summoner Name</button>
-        <button id="delLocalStorage">Delete Local Storage</button>
     </div>
 
     <hr>

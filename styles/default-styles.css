@@ -39,3 +39,7 @@ body {
     margin-top: 8px;
     margin-bottom: 8px;
 }
+
+button {
+    margin: 5px;
+}
