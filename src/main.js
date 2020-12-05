@@ -339,38 +339,6 @@ function setStoredNames(item) {
 
 // Reference: https://gist.github.com/4dams/1808b051c4a3419e96f20ec4d19d2124
 let getChampName = async (champID) => {
-    // const xhr = new XMLHttpRequest();
-    // const champJson = "http://ddragon.leagueoflegends.com/cdn/10.24.1/data/en_US/champion.json";
-
-    // xhr.onerror = (e) => console.log("error");
-
-    // xhr.onload = (e) => {
-    //     const headers = e.target.getAllResponseHeaders();
-    //     const jsonString = e.target.response;
-    //     //console.log(`headers = ${headers}`);
-    //     //console.log(`jsonString = ${jsonString}`);
-
-    //     // update the UI by showing the joke
-    //     const json = JSON.parse(jsonString);
-    //     //parseData(json);
-    //     let champList = json.data;
-
-    //     //console.log(champList);
-
-    //     for (let i in champList) {
-    //         if (champList[i].key == champID) {
-    //             //console.log(champList[i].name);
-    //             allChamps.push(champList[i].name);
-    //             console.log(allChamps);
-    //         }
-    //         //console.log(champList[i].id + " | " + champList[i].key);
-    //     }
-    // };
-
-    // xhr.open("GET", champJson);
-
-    // xhr.send();
-
     try {
         const response = await fetch("http://ddragon.leagueoflegends.com/cdn/10.24.1/data/en_US/champion.json");
         const data = await response.json();
