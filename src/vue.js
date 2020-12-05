@@ -13,6 +13,7 @@ const app = new Vue({
         },
         deleteLocalStorage() {
             localStorage.clear();
+            lastSearched,clear();
             localStorage.setItem("StoredSummoners");
         },
     },

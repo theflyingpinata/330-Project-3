@@ -9,6 +9,10 @@ body {
     font-family: 'Source Sans Pro', sans-serif;
 }
 
+#bootstrap-override body{
+    background-color: #f1efef;
+}
+
 #myChart {
     width: 400px;
 }

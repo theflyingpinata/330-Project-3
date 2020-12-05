@@ -5,6 +5,7 @@ let storedNames = [];
 let allTimeeammates = {};
 let keys = [];
 let win = 0, lose = 0;
+let selectedChampID = 0;
 
 function setupVariables() {
     summonerName = "theflyingpinata";
@@ -109,7 +110,7 @@ function playerSearch() {
     // 2. Create an XHR object to download the web service
     // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/
     const xhr = new XMLHttpRequest();
-    const apiKey = "RGAPI-971dd69c-024f-43c8-81a8-5dfb6a915e71";
+    const apiKey = "RGAPI-fb240766-1046-4570-b23e-7e3b2e57ac81";
     //https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Doublelift?api_key=RGAPI-YOUR-API-KEY
     const url = `https://people.rit.edu/kct2548/330/project-3/php/history_proxy.php?summoner=${summonerName}&apiKey=${apiKey}&endIndex=${endIndex}`;
 
@@ -141,6 +142,8 @@ function playerSearch() {
         // update the UI by showing the joke
         const json = JSON.parse(jsonString);
         parseData(json);
+        console.log(json);
+
         /*
         content.innerHTML = '';
         for (let value of json) {
@@ -174,6 +177,8 @@ function playerSearch() {
 
     // finally, send the request
     xhr.send();
+
+    //getChampName(selectedChampID);
 }
 
 function parseData(json) {
@@ -191,6 +196,9 @@ function parseData(json) {
         for (let i = 0; i < 10; i++) {
             if (match["participantIdentities"][i]["player"]["summonerName"] == summonerName) {
                 summonerPID = match["participantIdentities"][i]["participantId"];
+                selectedChampID = match["participants"][i]["championId"];
+                console.log(selectedChampID);
+                getChampName(selectedChampID);
                 break;
             }
         }
@@ -230,12 +238,13 @@ function parseData(json) {
                 }
             }
 
-
             // opponent 
             else {
 
             }
         }
+
+
 
 
 
@@ -301,12 +310,12 @@ function initChart() {
     for (let i = 0; i < 5; i++) {
         let image = new Image(100, 100);
         image.src = `http://ddragon.leagueoflegends.com/cdn/10.23.1/img/profileicon/${allTimeeammates[keys[i]]["profileIcon"]}.png`;
-        console.log(image.src);
+        //console.log(image.src);
         image.onload = function () {
             images[i] = image;
             imagesLoaded++;
             if (imagesLoaded == 5) {
-                console.log(images);
+                //console.log(images);
                 charting.basicBarGraph(400, 1000, "# of Games with Summoner on Your Team", keys.slice(0, 5), "# of Games", data, images);
             }
         };
@@ -316,6 +325,40 @@ function initChart() {
 
 function setStoredNames(item) {
     storedNames = item;
+}
+
+// Reference: https://gist.github.com/4dams/1808b051c4a3419e96f20ec4d19d2124
+function getChampName(champID) {
+    const xhr = new XMLHttpRequest();
+    const champJson = "http://ddragon.leagueoflegends.com/cdn/10.24.1/data/en_US/champion.json";
+
+    xhr.onerror = (e) => console.log("error");
+
+    xhr.onload = (e) => {
+        const headers = e.target.getAllResponseHeaders();
+        const jsonString = e.target.response;
+        //console.log(`headers = ${headers}`);
+        //console.log(`jsonString = ${jsonString}`);
+
+        // update the UI by showing the joke
+        const json = JSON.parse(jsonString);
+        //parseData(json);
+        let champList = json.data;
+
+        console.log(champList);
+
+        for (let i in champList) {
+            if (champList[i].key == champID) {
+                console.log(champList[i].name)
+            }
+
+            //console.log(champList[i].id + " | " + champList[i].key);
+        }
+    };
+
+    xhr.open("GET", champJson);
+
+    xhr.send();
 }
 
 export { init, setStoredNames, playerSearch, summonerName, storedNames };
