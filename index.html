@@ -29,7 +29,7 @@
     <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 
     <script src="./src/loader.js" type="module"></script>
-    <link href='styles/default-styles.css' rel="stylesheet"/>
+    <link href='styles/default-styles.css' rel="stylesheet" />
 </head>
 
 <body id="bootstrap-override">
@@ -58,18 +58,25 @@
 
             <h4>{{ lastSearchedTitle }}</h4>
 
-            <ol>
-                <li  v-for="l in lastSearched.slice().reverse()"> {{ l }} </li>
-            </ol>
+            <!-- <ol>
+                <li v-for="l in lastSearched.slice().reverse()"> {{ l }} </li>
+            </ol> -->
+
+            <last-searched v-bind:searched="lastSearched"></last-searched>
 
             <button v-on:click="deleteLocalStorage"> Delete Local Storage </button>
         </div>
-    </div>
 
-    <hr>
+        <div id="stats">
+            <div id="content">
+                Stinky
+                <winsandlosses v-bind:winsandlossesTitle="winsandlossesTitle" v-bind:gameRecords="gameRecords"></winsandlosses>
+            </div>
 
-    <div id="content">
-        Stinky
+            <div id="favorites">
+                <h2> Favorites </h2>
+            </div>
+        </div>
     </div>
 </body>
 
