@@ -3,9 +3,9 @@ import * as charting from "./charting.js";
 let summonerName = "theflyingpinata";
 let storedNames = [];
 let allTimeeammates = {};
+let allChamps = [];
 let keys = [];
 let win = 0, lose = 0;
-let selectedChampID = 0;
 
 function setupVariables() {
     summonerName = "theflyingpinata";
@@ -181,24 +181,26 @@ function playerSearch() {
     //getChampName(selectedChampID);
 }
 
-function parseData(json) {
+const parseData = async(json) => {
     win = 0;
     lose = 0;
     keys = [];
+    allChamps = [];
     allTimeeammates = {};
+    let winloss = [];
     let content = document.querySelector("#content");
     content.innerHTML = '';
     // loop through matches
     for (let match of json) {
         let summonerPID;
         let summonerTeam, teamIndex;
+        let selectedChampID = 0;
         // loop through the participantIdentities to find the summoner's participantId
         for (let i = 0; i < 10; i++) {
             if (match["participantIdentities"][i]["player"]["summonerName"] == summonerName) {
                 summonerPID = match["participantIdentities"][i]["participantId"];
                 selectedChampID = match["participants"][i]["championId"];
-                console.log(selectedChampID);
-                getChampName(selectedChampID);
+                await getChampName(selectedChampID);
                 break;
             }
         }
@@ -215,9 +217,11 @@ function parseData(json) {
 
         // Team stats
         if (match["teams"][teamIndex]["win"] == "Win") {
+            winloss.push("Win");
             win++;
         }
         else {
+            winloss.push("Loss");
             lose++;
         }
 
@@ -243,10 +247,6 @@ function parseData(json) {
 
             }
         }
-
-
-
-
 
         // sort team mates //////////////////
 
@@ -290,6 +290,16 @@ function parseData(json) {
     p.innerHTML += `<b> Wins: ${win}</b><br><b>Loses: ${lose} </b>`;
     content.appendChild(p);
 
+    // Wins and loses with champ info
+    let champWinsLoss = document.createElement("p");
+    champWinsLoss.innerHTML = `<b> <u> Champs Selected </u> </b> <br>`;
+    console.log(allChamps);
+    for (let i = 0; i < allChamps.length; i++) {
+        champWinsLoss.innerHTML += `<b> Game ${(i + 1)}: ${allChamps[i]} | Result: ${winloss[i]} <b> <br>`;
+    }
+    content.appendChild(champWinsLoss);
+
+    //allChamps = [];
     initChart();
 }
 
@@ -328,37 +338,56 @@ function setStoredNames(item) {
 }
 
 // Reference: https://gist.github.com/4dams/1808b051c4a3419e96f20ec4d19d2124
-function getChampName(champID) {
-    const xhr = new XMLHttpRequest();
-    const champJson = "http://ddragon.leagueoflegends.com/cdn/10.24.1/data/en_US/champion.json";
+let getChampName = async (champID) => {
+    // const xhr = new XMLHttpRequest();
+    // const champJson = "http://ddragon.leagueoflegends.com/cdn/10.24.1/data/en_US/champion.json";
 
-    xhr.onerror = (e) => console.log("error");
+    // xhr.onerror = (e) => console.log("error");
 
-    xhr.onload = (e) => {
-        const headers = e.target.getAllResponseHeaders();
-        const jsonString = e.target.response;
-        //console.log(`headers = ${headers}`);
-        //console.log(`jsonString = ${jsonString}`);
+    // xhr.onload = (e) => {
+    //     const headers = e.target.getAllResponseHeaders();
+    //     const jsonString = e.target.response;
+    //     //console.log(`headers = ${headers}`);
+    //     //console.log(`jsonString = ${jsonString}`);
 
-        // update the UI by showing the joke
-        const json = JSON.parse(jsonString);
-        //parseData(json);
-        let champList = json.data;
+    //     // update the UI by showing the joke
+    //     const json = JSON.parse(jsonString);
+    //     //parseData(json);
+    //     let champList = json.data;
 
-        console.log(champList);
+    //     //console.log(champList);
 
+    //     for (let i in champList) {
+    //         if (champList[i].key == champID) {
+    //             //console.log(champList[i].name);
+    //             allChamps.push(champList[i].name);
+    //             console.log(allChamps);
+    //         }
+    //         //console.log(champList[i].id + " | " + champList[i].key);
+    //     }
+    // };
+
+    // xhr.open("GET", champJson);
+
+    // xhr.send();
+
+    try {
+        const response = await fetch("http://ddragon.leagueoflegends.com/cdn/10.24.1/data/en_US/champion.json");
+        const data = await response.json();
+        //console.log(data);
+
+        let champList = data.data;
         for (let i in champList) {
             if (champList[i].key == champID) {
-                console.log(champList[i].name)
+                //console.log(champList[i].name);
+                allChamps.push(champList[i].name);
+                console.log(allChamps);
             }
-
-            //console.log(champList[i].id + " | " + champList[i].key);
         }
-    };
 
-    xhr.open("GET", champJson);
-
-    xhr.send();
+    } catch {
+        console.log(err);
+    }
 }
 
 export { init, setStoredNames, playerSearch, summonerName, storedNames };
