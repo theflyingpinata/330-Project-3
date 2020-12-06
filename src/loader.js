@@ -1,6 +1,7 @@
 import * as main from "./main.js";
 import * as vuecomponements from "./vueComponents.js";
 import * as vue from "./vue.js";
+import * as data from "./data.js";
 
 window.onload = () => {
     // load fonts, sounds, whatever ...
@@ -13,7 +14,7 @@ window.onload = () => {
 
     if (typeof(Storage) !== "undefined") {
         // Code for localStorage/sessionStorage.
-        main.setStoredNames(JSON.parse(localStorage.getItem("storedSummoners")));
+        data.setStoredNames(JSON.parse(localStorage.getItem("storedSummoners")));
 
         console.log("local storage detected");
 

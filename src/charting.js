@@ -15,7 +15,7 @@ function basicBarGraph(height, width, _title, _labels, _dataLabel, _data, _image
         'rgba(255, 159, 64, 0.2)'
     ];
 
-    console.log("before patterns");
+    //console.log("before patterns");
     if (_images != undefined) {
         // let fillPattern = ctx.createPattern(_images[0], 'repeat');
         // backgroundColors = fillPattern;
@@ -34,7 +34,7 @@ function basicBarGraph(height, width, _title, _labels, _dataLabel, _data, _image
         }
 
     }
-    console.log("Before bar data");
+    //console.log("Before bar data");
 
     let barChartData = {
         labels: _labels,
