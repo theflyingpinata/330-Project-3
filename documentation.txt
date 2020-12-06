@@ -1,0 +1,16 @@
+Facts of Legends
+Kippy Tidwell and Will Bertiz
+Section 1
+
+Api's used
+Chart.js - https://www.chartjs.org/
+Riot Games API - https://developer.riotgames.com/
+
+We used the League of Legends API, which is part of the Riot Games API to provide the user with info about their league of legends account.
+
+IMPORTANT: To use the Riot Games API, we have an api-key that expires every 24 hours. For this to work, we need to update they key.
+
+Kippy got the Riot Games api working and did some of the data parsing.
+Will did most of the visual stuff and did some of the data parsing.
+
+We think we deserve an A, mainly because parsing all of the data was pretty tricky, and we are happy with how it ended up turning out. We also used Vue to some effect. If we had more time and energy, we would be able to add more info about the users account, with only having to really do data parsing to add it( it would be a lot of data to parse however ).
