@@ -113,7 +113,7 @@ function playerSearch() {
     // 2. Create an XHR object to download the web service
     // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/
     const xhr = new XMLHttpRequest();
-    const apiKey = "RGAPI-fb240766-1046-4570-b23e-7e3b2e57ac81";
+    const apiKey = "RGAPI-7a763ff7-81e6-42a2-b1e5-fee6f0082a73";
     //https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Doublelift?api_key=RGAPI-YOUR-API-KEY
     const url = `https://people.rit.edu/kct2548/330/project-3/php/history_proxy.php?summoner=${summonerName}&apiKey=${apiKey}&endIndex=${endIndex}`;
 
@@ -325,21 +325,21 @@ const parseData = async (json) => {
 
     // Favorites info
 
-    let favTitle= document.createElement("div");
+    let favTitle = document.createElement("div");
     favTitle.innerHTML = `<h2> Favorites </h2>`;
     favorites.appendChild(favTitle);
 
     //#region SPELL FAVORITES
-    const orderedSpells = {};
-    Object.keys(favoriteSpells).sort().forEach(function (key) {
-        orderedSpells[key] = favoriteSpells[key];
-    });
+    let sortedSpells = sortByValue(favoriteSpells);
 
     let favSpells = document.createElement("p");
     favSpells.innerHTML = `<h3> Spells </h3>`;
     let countSpells = 0;
-    for (let keys in orderedSpells) {
-        favSpells.innerHTML += `<b> ${keys} | ${orderedSpells[keys]} Games <b> <br>`;
+
+    sortedSpells.reverse();
+
+    for (let i = 0; i < sortedSpells.length; i++) {
+        favSpells.innerHTML += `<b> ${sortedSpells[i][0]} | ${sortedSpells[i][1]} Games <b> <br>`;
 
         countSpells++;
         if (countSpells >= 3)
@@ -359,17 +359,16 @@ const parseData = async (json) => {
             champFreq[allChamps[i]] += 1;
     }
 
-    const orderedChamps = {};
-    Object.keys(champFreq).sort().forEach(function (key) {
-        orderedChamps[key] = champFreq[key];
-    });
+    let sortedChamps = sortByValue(champFreq);
 
     let favChamps = document.createElement("p");
     let countChamps = 0;
     favChamps.innerHTML = `<h3> Champions </h3>`;
 
-    for (let keys in orderedChamps) {
-        favChamps.innerHTML += `<b> ${keys} | ${orderedChamps[keys]} Games <b> <br>`;
+    sortedChamps.reverse();
+
+    for (let i = 0; i < sortedChamps.length; i++) {
+        favChamps.innerHTML += `<b> ${sortedChamps[i][0]} | ${sortedChamps[i][1]} Games <b> <br>`;
 
         countChamps++;
         if (countChamps >= 3)
@@ -457,6 +456,20 @@ let getSpellName = async (spellID) => {
     } catch {
         console.log(err);
     }
+}
+
+// Reference: https://stackoverflow.com/questions/1069666/sorting-object-property-by-values 
+function sortByValue(objectList) {
+    var sortable = [];
+    for (var value in objectList) {
+        sortable.push([value, objectList[value]]);
+    }
+
+    sortable.sort(function (a, b) {
+        return a[1] - b[1];
+    });
+
+    return sortable;
 }
 
 export { init, setStoredNames, playerSearch, summonerName, storedNames };
