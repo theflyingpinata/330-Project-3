@@ -1,4 +1,5 @@
 import * as charting from "./charting.js";
+import * as dataJS from "./data.js";
 
 let summonerName = "theflyingpinata";
 let storedNames = [];
@@ -19,9 +20,13 @@ function setupVariables() {
 }
 
 function init() {
+
+    dataJS.init();
+
     setupVariables();
 
-    //#region OLD INIT
+    {
+        //#region OLD INIT
     // document.querySelector("#searchBtn").onclick = (e) => {
     //     //let content = document.querySelector("#content");
     //     setupVariables();
@@ -100,12 +105,13 @@ function init() {
 
     // }; // end onclick
     //#endregion
+    }
 }
 
 function playerSearch() {
     //let content = document.querySelector("#content");
     setupVariables();
-    summonerName = document.querySelector("#summonerName").value;
+    summonerName = document.querySelector("#summonerName").value.toLowerCase();
 
     let endIndex = 3;
     endIndex = document.querySelector("#games").value;
@@ -113,7 +119,7 @@ function playerSearch() {
     // 2. Create an XHR object to download the web service
     // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/
     const xhr = new XMLHttpRequest();
-    const apiKey = "RGAPI-fb240766-1046-4570-b23e-7e3b2e57ac81";
+    const apiKey = "RGAPI-37fad064-9b72-4ead-a57b-0d7c17635bfc";
     //https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Doublelift?api_key=RGAPI-YOUR-API-KEY
     const url = `https://people.rit.edu/kct2548/330/project-3/php/history_proxy.php?summoner=${summonerName}&apiKey=${apiKey}&endIndex=${endIndex}`;
 
@@ -202,11 +208,11 @@ const parseData = async (json) => {
         let selectedChampID = 0;
         // loop through the participantIdentities to find the summoner's participantId
         for (let i = 0; i < 10; i++) {
-            if (match["participantIdentities"][i]["player"]["summonerName"] == summonerName) {
+            if (match["participantIdentities"][i]["player"]["summonerName"].toLowerCase() == summonerName) {
                 summonerPID = match["participantIdentities"][i]["participantId"];
                 selectedChampID = match["participants"][i]["championId"];
                 participantIndex = i;
-                await getChampName(selectedChampID);
+                await dataJS.getChampName(selectedChampID);
                 break;
             }
         }
@@ -226,8 +232,8 @@ const parseData = async (json) => {
 
         // Keep track of spells equipped
 
-        await getSpellName(match["participants"][participantIndex]["spell1Id"]);
-        await getSpellName(match["participants"][participantIndex]["spell2Id"]);
+        await dataJS.getSpellName(match["participants"][participantIndex]["spell1Id"]);
+        await dataJS.getSpellName(match["participants"][participantIndex]["spell2Id"]);
 
         // if (!favoriteSpells[match["participants"][participantIndex]["spell1Id"]])
         //     favoriteSpells[match["participants"][participantIndex]["spell1Id"]] = 1;
@@ -254,7 +260,7 @@ const parseData = async (json) => {
         for (let i = 0; i < 10; i++) {
             // teammates
             if (match["participants"][i]["teamId"] == summonerTeam) {
-                let tempSumName = match["participantIdentities"][i]["player"]["summonerName"];
+                let tempSumName = match["participantIdentities"][i]["player"]["summonerName"].toLowerCase();
                 if (tempSumName != summonerName) {
                     if (allTimeeammates[tempSumName] == undefined) {
                         allTimeeammates[tempSumName] = [];
@@ -302,9 +308,11 @@ const parseData = async (json) => {
 
     let teammatesList = document.createElement("ol");
     for (let i = 0; i < 5; i++) {
-        let p = document.createElement("p");
-        p.innerHTML = `<li><b>${keys[i]}: ${allTimeeammates[keys[i]]["count"]}</b></li>`;
-        content.appendChild(p);
+        if (keys[i] != undefined) {
+            let p = document.createElement("p");
+            p.innerHTML = `<li><b>${keys[i]}: ${allTimeeammates[keys[i]]["count"]}</b></li>`;
+            content.appendChild(p);
+        }
     }
     teammatesList.append("ol");
 
@@ -325,7 +333,7 @@ const parseData = async (json) => {
 
     // Favorites info
 
-    let favTitle= document.createElement("div");
+    let favTitle = document.createElement("div");
     favTitle.innerHTML = `<h2> Favorites </h2>`;
     favorites.appendChild(favTitle);
 
@@ -387,7 +395,9 @@ function initChart() {
     // chart
     let data = [];
     for (let i = 0; i < 5; i++) {
-        data.push(allTimeeammates[keys[i]]["count"]);
+        if (keys[i] != undefined) {
+            data.push(allTimeeammates[keys[i]]["count"]);
+        }
     }
 
     // profile icon example
@@ -396,17 +406,32 @@ function initChart() {
     let images = [];
     let imagesLoaded = 0;
     for (let i = 0; i < 5; i++) {
-        let image = new Image(100, 100);
-        image.src = `http://ddragon.leagueoflegends.com/cdn/10.23.1/img/profileicon/${allTimeeammates[keys[i]]["profileIcon"]}.png`;
-        //console.log(image.src);
-        image.onload = function () {
-            images[i] = image;
+        if (keys[i] != undefined) {
+            let image = new Image(100, 100);
+            image.src = `http://ddragon.leagueoflegends.com/cdn/10.23.1/img/profileicon/${allTimeeammates[keys[i]]["profileIcon"]}.png`;
+            //console.log(image.src);
+            image.onload = function () {
+                images[i] = image;
+                imagesLoaded++;
+                if (imagesLoaded == 5) {
+                    //console.log(images);
+                    charting.basicBarGraph(400, 1000, "# of Games with Summoner on Your Team", keys.slice(0, 5), "# of Games", data, images);
+                }
+            };
+            image.onerror = function () {
+                images[i] = "white";
+                imagesLoaded++;
+                console.log("Error Caught with Icon");
+                if (imagesLoaded == 5) {
+                    //console.log(images);
+                    charting.basicBarGraph(400, 1000, "# of Games with Summoner on Your Team", keys.slice(0, 5), "# of Games", data, images);
+                }
+                
+            };
+        }
+        else {
             imagesLoaded++;
-            if (imagesLoaded == 5) {
-                //console.log(images);
-                charting.basicBarGraph(400, 1000, "# of Games with Summoner on Your Team", keys.slice(0, 5), "# of Games", data, images);
-            }
-        };
+        }
     }
 
 }
@@ -415,48 +440,7 @@ function setStoredNames(item) {
     storedNames = item;
 }
 
-// Reference: https://gist.github.com/4dams/1808b051c4a3419e96f20ec4d19d2124
-let getChampName = async (champID) => {
-    try {
-        const response = await fetch("http://ddragon.leagueoflegends.com/cdn/10.24.1/data/en_US/champion.json");
-        const data = await response.json();
-        //console.log(data);
 
-        let champList = data.data;
-        for (let i in champList) {
-            if (champList[i].key == champID) {
-                //console.log(champList[i].name);
-                allChamps.push(champList[i].name);
-                //console.log(allChamps);
-            }
-        }
 
-    } catch {
-        console.log(err);
-    }
-}
-
-let getSpellName = async (spellID) => {
-    try {
-        const response = await fetch("http://ddragon.leagueoflegends.com/cdn/10.24.1/data/en_US/summoner.json");
-        const data = await response.json();
-        //console.log(data);
-
-        let spellList = data.data;
-        for (let i in spellList) {
-            if (spellList[i].key == spellID) {
-                if (!favoriteSpells[spellList[i].name])
-                    favoriteSpells[spellList[i].name] = 1;
-                else
-                    favoriteSpells[spellList[i].name] += 1;
-            }
-        }
-
-        console.log(favoriteSpells);
-
-    } catch {
-        console.log(err);
-    }
-}
 
 export { init, setStoredNames, playerSearch, summonerName, storedNames };
