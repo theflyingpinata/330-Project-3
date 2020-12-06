@@ -15,7 +15,6 @@ let timestamps = [];
 let content = document.querySelector("#content");
 let favorites = document.querySelector("#favorites");
 let participantIndex;
-let lastSummonerSearched;
 
 function setupVariables() {
     summonerName = "theflyingpinata";
@@ -27,7 +26,7 @@ function setupVariables() {
 
 let getJSONData = async (value) => {
     try {
-        const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/10.24.1/data/en_US/${value}.json`);
+        const response = await fetch(`http://ddragon.leagueoflegends.com/cdn/10.24.1/data/en_US/${value}.json`);
         const data = await response.json();
         return data.data;
 
@@ -43,12 +42,6 @@ const init = async() => {
     spellJSON = await getJSONData("summoner");
     itemJSON = await getJSONData("item");
 
-    if (localStorage.getItem("lastSearched") != undefined)
-    {
-        lastSummonerSearched = localStorage.getItem("lastSearched");
-        summonerName = lastSummonerSearched;   
-        document.querySelector("#summonerName").value = summonerName;
-    }
 }
 
 
@@ -372,8 +365,6 @@ function updateLocalStorage() {
         storedNames.splice(storedNames.indexOf(summonerName), 1);
         storedNames.push(summonerName);
     }
-
-    localStorage.setItem("lastSearched", summonerName);
 
     console.log("storedNames: " + storedNames);
     localStorage.setItem("storedSummoners", JSON.stringify(storedNames));
