@@ -93,7 +93,7 @@ function init() {
 }
 
 function playerSearch() {
-    //let content = document.querySelector("#content");
+    document.querySelector("#content").innerHTML = "LOADING";
     //setupVariables();
     let summonerName = document.querySelector("#summonerName").value.toLowerCase();
     dataJS.setSummonerName(summonerName);
