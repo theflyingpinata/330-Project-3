@@ -251,55 +251,54 @@ function constructPage() {
     favTitle.innerHTML = `<h2> Favorites </h2>`;
     favorites.appendChild(favTitle);
 
-    //#region SPELL FAVORITES
-    const orderedSpells = {};
-    Object.keys(favoriteSpells).sort().forEach(function (key) {
-        orderedSpells[key] = favoriteSpells[key];
-    });
+     //#region SPELL FAVORITES
 
-    let favSpells = document.createElement("p");
-    favSpells.innerHTML = `<h3> Spells </h3>`;
-    let countSpells = 0;
-    for (let keys in orderedSpells) {
-        favSpells.innerHTML += `<b> ${keys} | ${orderedSpells[keys]} Games <b> <br>`;
-
-        countSpells++;
-        if (countSpells >= 3)
-            break;
-    }
-    favorites.appendChild(favSpells);
-    //#endregion
-
-    //#region CHAMPION FAVORITES
-    let champFreq = {};
-
-    for (let i = 0; i < allChamps.length; i++) {
-
-        if (!champFreq[allChamps[i]])
-            champFreq[allChamps[i]] = 1
-        else
-            champFreq[allChamps[i]] += 1;
-    }
-
-    const orderedChamps = {};
-    Object.keys(champFreq).sort().forEach(function (key) {
-        orderedChamps[key] = champFreq[key];
-    });
-    console.log(orderedChamps);
-
-    let favChamps = document.createElement("p");
-    let countChamps = 0;
-    favChamps.innerHTML = `<h3> Champions </h3>`;
-
-    for (let keys in orderedChamps) {
-        favChamps.innerHTML += `<b> ${keys} | ${orderedChamps[keys]} Games <b> <br>`;
-
-        countChamps++;
-        if (countChamps >= 3)
-            break;
-    }
-    favorites.appendChild(favChamps);
-    //#endregion
+     let favSpells = document.createElement("p");
+     favSpells.innerHTML = `<h3> Spells </h3>`;
+ 
+     let sortedSpells = sortByValue(favoriteSpells);
+     sortedSpells.reverse();
+     console.log(sortedSpells);
+     let countSpells = 0;
+ 
+     for (let i = 0; i < sortedSpells.length; i++) {
+         favSpells.innerHTML += `<b> ${sortedSpells[i][0]} | ${sortedSpells[i][1]} Games <b> <br>`;
+ 
+         countSpells++;
+         if (countSpells >= 3)
+             break;
+     }
+     favorites.appendChild(favSpells);
+     //#endregion
+ 
+     //#region CHAMPION FAVORITES
+     let champFreq = {};
+ 
+     for (let i = 0; i < allChamps.length; i++) {
+ 
+         if (!champFreq[allChamps[i]])
+             champFreq[allChamps[i]] = 1
+         else
+             champFreq[allChamps[i]] += 1;
+     }
+ 
+     let sortedChamps = sortByValue(champFreq);
+ 
+     let favChamps = document.createElement("p");
+     let countChamps = 0;
+     favChamps.innerHTML = `<h3> Champions </h3>`;
+ 
+     sortedChamps.reverse();
+ 
+     for (let i = 0; i < sortedChamps.length; i++) {
+         favChamps.innerHTML += `<b> ${sortedChamps[i][0]} | ${sortedChamps[i][1]} Games <b> <br>`;
+ 
+         countChamps++;
+         if (countChamps >= 3)
+             break;
+     }
+     favorites.appendChild(favChamps);
+     //#endregion
 } // end constucting page
 
 
@@ -373,6 +372,20 @@ function updateLocalStorage() {
 
 function setSummonerName(value) {
     summonerName = value;
+}
+
+// Reference: https://stackoverflow.com/questions/1069666/sorting-object-property-by-values 
+function sortByValue(objectList) {
+    var sortable = [];
+    for (var value in objectList) {
+        sortable.push([value, objectList[value]]);
+    }
+
+    sortable.sort(function (a, b) {
+        return a[1] - b[1];
+    });
+
+    return sortable;
 }
 
 export { init, getChampName, getSpellName, parseData, setStoredNames, summonerName, storedNames, updateLocalStorage, setSummonerName };

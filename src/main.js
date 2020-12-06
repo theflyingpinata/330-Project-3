@@ -308,13 +308,14 @@ const parseData = async (json) => {
     favorites.appendChild(favTitle);
 
     //#region SPELL FAVORITES
-    let sortedSpells = sortByValue(favoriteSpells);
 
     let favSpells = document.createElement("p");
     favSpells.innerHTML = `<h3> Spells </h3>`;
-    let countSpells = 0;
 
+    let sortedSpells = sortByValue(favoriteSpells);
     sortedSpells.reverse();
+    console.log(sortedSpells);
+    let countSpells = 0;
 
     for (let i = 0; i < sortedSpells.length; i++) {
         favSpells.innerHTML += `<b> ${sortedSpells[i][0]} | ${sortedSpells[i][1]} Games <b> <br>`;
@@ -386,10 +387,6 @@ function initChart() {
         };
     }
 
-}
-
-function setStoredNames(item) {
-    storedNames = item;
 }
 
 // Reference: https://gist.github.com/4dams/1808b051c4a3419e96f20ec4d19d2124
