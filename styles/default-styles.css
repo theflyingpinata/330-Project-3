@@ -10,7 +10,7 @@ body {
 }
 
 #bootstrap-override body{
-    background-color: #f1efef;
+    /* background-color: #f1efef; */
 }
 
 #myChart {
