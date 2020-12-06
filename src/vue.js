@@ -1,3 +1,4 @@
+import * as data from "./data.js";
 import * as main from "./main.js";
 
 const app = new Vue({
@@ -11,8 +12,8 @@ const app = new Vue({
     methods: {
         updateLocalStorage() {
             main.playerSearch();
-            this.gameRecords = main.gameRecords;
-            this.lastSearched = main.storedNames;
+            //this.gameRecords = data.gameRecords;
+            this.lastSearched = data.storedNames;
         },
         deleteLocalStorage() {
             localStorage.clear();

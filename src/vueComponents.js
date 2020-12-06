@@ -7,7 +7,10 @@ function wrapper() {
         </ol>`
     });
 
-    
+    Vue.component('spell-info', {
+        props: ['itemName', 'value'],
+        template: `<b> {{itemName}} | {{value}} Games <b> <br>`
+    });
 };
 
 export { wrapper };

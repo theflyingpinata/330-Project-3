@@ -1,27 +1,16 @@
 import * as charting from "./charting.js";
+import * as dataJS from "./data.js";
 
-let summonerName = "theflyingpinata";
-let storedNames = [];
-let allTimeeammates = {};
-let allChamps = [];
-let keys = [];
-let win = 0, lose = 0;
-let favoriteRunes = [];
-let favoriteAbilities = [];
-let favoriteSpells = {};
 
-function setupVariables() {
-    summonerName = "theflyingpinata";
-    allTimeeammates = {};
-    keys = [];
-    win = 0, lose = 0;
-    //names = storedNames;
-}
 
 function init() {
-    setupVariables();
 
-    //#region OLD INIT
+    dataJS.init();
+
+    //setupVariables();
+
+    {
+        //#region OLD INIT
     // document.querySelector("#searchBtn").onclick = (e) => {
     //     //let content = document.querySelector("#content");
     //     setupVariables();
@@ -100,20 +89,21 @@ function init() {
 
     // }; // end onclick
     //#endregion
+    }
 }
 
 function playerSearch() {
-    //let content = document.querySelector("#content");
-    setupVariables();
-    summonerName = document.querySelector("#summonerName").value;
-
+    document.querySelector("#content").innerHTML = "LOADING";
+    //setupVariables();
+    let summonerName = document.querySelector("#summonerName").value.toLowerCase();
+    dataJS.setSummonerName(summonerName);
     let endIndex = 3;
     endIndex = document.querySelector("#games").value;
     let beginTime = 1605225600;
     // 2. Create an XHR object to download the web service
     // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/
     const xhr = new XMLHttpRequest();
-    const apiKey = "RGAPI-7a763ff7-81e6-42a2-b1e5-fee6f0082a73";
+    const apiKey = "RGAPI-37fad064-9b72-4ead-a57b-0d7c17635bfc";
     //https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Doublelift?api_key=RGAPI-YOUR-API-KEY
     const url = `https://people.rit.edu/kct2548/330/project-3/php/history_proxy.php?summoner=${summonerName}&apiKey=${apiKey}&endIndex=${endIndex}`;
 
@@ -144,7 +134,7 @@ function playerSearch() {
 
         // update the UI by showing the joke
         const json = JSON.parse(jsonString);
-        parseData(json);
+        dataJS.parseData(json);
         console.log(json);
 
         /*
@@ -156,19 +146,7 @@ function playerSearch() {
         }
         */
 
-        // Only update local storage if data loaded in correctly
-        if (!storedNames)
-            storedNames = [];
-
-        if (!storedNames.includes(summonerName))
-            storedNames.push(summonerName);
-        else {
-            storedNames.splice(storedNames.indexOf(summonerName), 1);
-            storedNames.push(summonerName);
-        }
-
-        console.log("storedNames: " + storedNames);
-        localStorage.setItem("storedSummoners", JSON.stringify(storedNames));
+        dataJS.updateLocalStorage();
 
     }; // end xhr.onload
 
@@ -472,4 +450,4 @@ function sortByValue(objectList) {
     return sortable;
 }
 
-export { init, setStoredNames, playerSearch, summonerName, storedNames };
+export { init, playerSearch };// setStoredNames, summonerName, storedNames

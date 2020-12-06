@@ -15,6 +15,7 @@ function basicBarGraph(height, width, _title, _labels, _dataLabel, _data, _image
         'rgba(255, 159, 64, 0.2)'
     ];
 
+    //console.log("before patterns");
     if (_images != undefined) {
         // let fillPattern = ctx.createPattern(_images[0], 'repeat');
         // backgroundColors = fillPattern;
@@ -22,12 +23,18 @@ function basicBarGraph(height, width, _title, _labels, _dataLabel, _data, _image
         let domMatrix = new DOMMatrix()
         backgroundColors = [];
         for (let image of _images) {
-            let fillPattern = ctx.createPattern(image, 'repeat');
-            fillPattern.setTransform(domMatrix.scale(.25));
-            backgroundColors.push(fillPattern);
+            if (image == "white") { //  this will happen when there is an error with getting the icon
+                backgroundColors.push("white");
+            }
+            else {
+                let fillPattern = ctx.createPattern(image, 'repeat');
+                fillPattern.setTransform(domMatrix.scale(.25));
+                backgroundColors.push(fillPattern);
+            }
         }
 
     }
+    //console.log("Before bar data");
 
     let barChartData = {
         labels: _labels,
